@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head> 
+  <title>Money Monsters - MPs are money crazy, can you stop them?</title>
+
+<style>
+body {
+    background-image: url("clipart/parliament-blackandwhite.jpg");
+    background-position: top right;
+    background-color: #eeeeee;
+}
+h1 {
+    text-align: center;
+    color: #ccc;
+}
+#players {
+    display: inline-block;
+    text-align: center;
+    margin: 0 auto;
+}
+#you, #opposition {
+    border: 3px solid #999;
+    display: inline-block;
+    text-align: center;
+    padding: 10px;
+    border-radius: 20px;
+    color: #eee;
+}
+#you img, #opposition img {
+    margin-top: 1em;
+}
+#mp {
+    margin: 2em;
+    display: inline-block;
+    text-align: center;
+}
+#mpname, #mpclaimed {
+    margin: 1em;
+    color: #eee;
+    font-weight: bold;
+    font-size: 1.2em;
+}
+#mpname {
+  font-weight: bold;
+  font-size: 1.7em;
+}
+#YourClaims, #OppositionClaims {
+  font-size: 2.5em;
+  font-weight: bold;
+  color: #fff;
+}
+#YourMostClaims {
+  font-size: 5em;
+}
+#mostclaimsever {
+  clear: both;
+  color: #fff;
+  background-color: #333;
+  opacity: 0.6;
+  border-radius: 20px;
+  font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Money Monsters</h1>
+
+<p>
+
+<form>
+
+<div id="players">
+
+  <div id="you">
+    <div>Your Claaaim</div>
+    <div>&pound;<input type="text" name="first_name" id="player1" /></div>
+    <div><button onclick="playgame(); return false;">Make your claim!</button></div>
+    <div><img src="clipart/zombie-right-115x200.png" alt="some_text"></div>
+    <div id="YourClaims">0</div>
+  </div>
+
+  <div id="mp">
+    <div id="mpname">?</div> 
+    <div><img src="clipart/zombie-face-172x200.png" alt="some_text"></div>
+    <div id="mpclaimed">ClAAAIMED &pound;<span id="mpclaim"></span></div>
+  </div>
+
+  <div id="opposition">
+    <div>Opposition Claaaim</div> 
+    <div>&pound;<input type="text" name="last_name"  id="player2" /></div>
+    <br>
+    <div><img src="clipart/zombie-left-115x200.png" alt="some_text"></div>
+    <div id="OppositionClaims">0</div>
+  </div>
+ 
+  <div id="mostclaimsever">
+   Your Most Claaaims Ever: <span id="YourMostClaims">0</span>
+  </div>
+</div>
+
+</form>
+
+<p>
+
+<p>
+
+
+<script type="text/javascript">
+
+var AllMpsClaims = [6000, 1000, 124, 8.70, 250, 9000];
+var AllMpsNames = ["David Camorron", "Poop Face", "Hulk", "Jhon Smith", "Steven", "Bra Bra"];
+
+var YourEpicScore = 0;
+var Player2Score = 0;
+
+var YourMostEpicScore = 0;
+
+var MPClaim = 0;
+var MPName = "???";
+
+function StartNewGame() {
+    var mpnumber = guess(0, 5);
+    MPClaim = AllMpsClaims[mpnumber];
+    MPName = AllMpsNames[mpnumber];
+   
+   setMPName(MPName);
+   setMPClaim("????");
+}  
+StartNewGame();
+
+function playgame() {
+    setMPClaim(MPClaim);
+    var player1 = document.getElementById("player1").value;
+    player1 = parseInt(player1);
+
+    var player2 = AI(MPClaim);
+    setOppositionClaim(player2);
+
+    if (player1 > MPClaim && player2 > MPClaim) {
+        ScoreP1Game(0);
+	ScoreP2Game(0);
+        alert("Too much Claaaims! Shame on both of you!");
+    } else if (player1 > MPClaim) {
+        ScoreP2Game(player2);
+        ScoreP1Game(0);
+        alert("You claimed too much. Shaaaame!");
+    } else if (player2 > MPClaim) {
+        ScoreP1Game(player1);
+        ScoreP2Game(0);
+        alert("Opposition claaaimed too much; You win");
+    } else if (player1 > player2) {
+        ScoreP1Game(player1); 
+        alert("Monster claim! You win :)");
+    } else if (player2 > player1) {
+         ScoreP2Game(player2);
+         alert("Your claaaim was lacking. Moar Claaaims!");
+    } else if (player1 == player2) {
+         alert("You claaaimed the same. Try claaaiming more!");
+    }
+
+    setMPClaim('????');
+    setOppositionClaim('');
+
+    StartNewGame();
+}
+
+function ScoreP1Game(newscore) {
+    if (newscore == 0) {
+        YourEpicScore = 0;
+    } else {
+        YourEpicScore = YourEpicScore + newscore;
+        if (YourEpicScore > YourMostEpicScore) {
+            YourMostEpicScore = YourEpicScore;
+        }
+    }
+    document.getElementById("YourClaims").textContent = YourEpicScore;
+    document.getElementById("YourMostClaims").textContent = YourMostEpicScore;
+}
+
+
+function ScoreP2Game(newscore) {
+    if (newscore == 0) {
+        Player2Score = 0;
+    } else {
+        Player2Score = Player2Score + newscore;
+    }
+    document.getElementById("OppositionClaims").textContent = Player2Score;
+}
+
+function guess(min,max) {
+    return Math.floor(Math.random()*(max-min+1)+min);
+}
+
+function AI(MPClaim) {
+    var low = MPClaim * 0.5;
+    var high = MPClaim + (low * 0.5)
+    return guess(low, high);
+}
+
+function setMPClaim(amount) {
+    document.getElementById("mpclaim").textContent = amount;
+}
+
+function setMPName(name) {
+    document.getElementById("mpname").textContent = name;
+}
+
+function setOppositionClaim(amount) {
+    document.getElementById("player2").value = amount;
+}
+</script>
+
+
+</body>
+</html>
