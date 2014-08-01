@@ -106,6 +106,8 @@ h1 {
 
 <p>
 
+<script type="text/javascript" src="mpnames.js"></script>
+<script type="text/javascript" src="mpclaims.js"></script>
 
 <script type="text/javascript">
 
@@ -121,10 +123,13 @@ var MPClaim = 0;
 var MPName = "???";
 
 function StartNewGame() {
-    var mpnumber = guess(0, 5);
-    MPClaim = AllMpsClaims[mpnumber];
-    MPName = AllMpsNames[mpnumber];
+    var mpnumber = guess(0, 656);
+    //MPClaim = AllMpsClaims[mpnumber];
+    //MPName = AllMpsNames[mpnumber];
    
+   MPClaim = RealMPsClaims[mpnumber];
+   MPName = RealMPsNames[mpnumber];
+
    setMPName(MPName);
    setMPClaim("????");
 }  
